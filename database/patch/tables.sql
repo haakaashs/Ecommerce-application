@@ -1,20 +1,17 @@
 
 -- source this file for the first time.
 
-
 -- user table create query
 CREATE TABLE users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    role VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
     is_active TINYINT(1) NOT NULL,
-    phone BIGINT NOT NULL,
+    phone BIGINT NOT NULL UNIQUE,
     address VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-
 
 
 -- product table create query

@@ -1,17 +1,21 @@
 package models
 
+import "time"
+
 type User struct {
-	Id uint64
+	ID        uint      `gorm:"primary_key" json:"id"`
+	Name      string    `gorm:"type:varchar(255);not null" json:"name"`
+	Password  string    `gorm:"type:varchar(255);not null" json:"-"`
+	Email     string    `gorm:"type:varchar(255);not null;unique" json:"email"`
+	Role      string    `gorm:"type:enum('admin', 'customer');not null" json:"role"`
+	IsActive  bool      `gorm:"type:tinyint(1);not null"`
+	Phone     int64     `gorm:"not null;unique" json:"phone"`
+	Address   string    `gorm:"type:varchar(255)" json:"address"`
+	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`
+	Cart      Cart      `gorm:"foreignkey:UserID"`
+	Order     []Order   `gorm:"foreignkey:UserID"`
 }
 
-// CREATE TABLE users (
-//     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-//     name VARCHAR(255) NOT NULL,
-//     password VARCHAR(255) NOT NULL,
-//     email VARCHAR(255) NOT NULL,
-//     role VARCHAR(255) NOT NULL,
-//     is_active TINYINT(1) NOT NULL,
-//     phone BIGINT NOT NULL,
-//     address VARCHAR(255),
-//     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-// );
+func (User) TableName() string {
+	return "users"
+}

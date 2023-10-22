@@ -7,7 +7,6 @@ import (
 )
 
 var (
-	basicDB   database.BasicDB
 	userDb    database.UserDb
 	productDb database.ProductDb
 	orderDb   database.OrderDb
@@ -15,7 +14,6 @@ var (
 )
 
 var (
-	basicService   service.BasicService
 	userService    service.UserService
 	productService service.ProductService
 	orderService   service.OrderService
@@ -23,15 +21,13 @@ var (
 )
 
 var (
-	basicHandler   handler.BasicHandler
 	userHandler    handler.UserHandler
-	productHandler handler.ProductHandle
+	productHandler handler.ProductHandler
 	orderHandler   handler.OrderHandler
 	cartHandler    handler.CartHandler
 )
 
 func buildDB() {
-	basicDB = database.NewBasicDB()
 	userDb = database.NewUserDb()
 	productDb = database.NewProductDb()
 	orderDb = database.NewOrderDb()
@@ -39,7 +35,6 @@ func buildDB() {
 }
 
 func buildService() {
-	basicService = service.NewBasicService(basicDB)
 	userService = service.NewUserService(userDb)
 	productService = service.NewProductService(productDb)
 	orderService = service.NewOrderService(orderDb)
@@ -49,9 +44,8 @@ func buildService() {
 func buildHandler() {
 	buildDB()
 	buildService()
-	basicHandler = handler.NewBasicHandler(basicService)
 	userHandler = handler.NewUserHandler(userService)
-	productHandler = handler.NewProductHandle(productService)
+	productHandler = handler.NewProductHandler(productService)
 	orderHandler = handler.NewOrderHandler(orderService)
 	cartHandler = handler.NewCartHandler(cartService)
 }
