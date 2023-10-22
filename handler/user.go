@@ -1,16 +1,28 @@
 package handler
 
-import "github.com/haakaashs/antino-labs/service"
+import (
+	"log"
+	"net/http"
 
-type UserHandle interface {
+	"github.com/haakaashs/antino-labs/service"
+)
+
+type UserHandler interface {
 }
 
-type userHandle struct {
+type userHandler struct {
 	userService service.UserService
 }
 
-func NewUserHandle(userService service.UserService) *userHandle {
-	return &userHandle{
+func NewUserHandler(userService service.UserService) *userHandler {
+	return &userHandler{
 		userService: userService,
 	}
+}
+
+func (u *userHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
+	funcdesc := "CreateUser"
+	log.Println("enter " + funcdesc)
+
+	log.Println("exit " + funcdesc)
 }

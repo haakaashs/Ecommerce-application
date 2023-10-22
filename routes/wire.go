@@ -24,7 +24,7 @@ var (
 
 var (
 	basicHandler   handler.BasicHandler
-	userHandler    handler.UserHandle
+	userHandler    handler.UserHandler
 	productHandler handler.ProductHandle
 	orderHandler   handler.OrderHandler
 	cartHandler    handler.CartHandler
@@ -50,7 +50,7 @@ func buildHandler() {
 	buildDB()
 	buildService()
 	basicHandler = handler.NewBasicHandler(basicService)
-	userHandler = handler.NewUserHandle(userService)
+	userHandler = handler.NewUserHandler(userService)
 	productHandler = handler.NewProductHandle(productService)
 	orderHandler = handler.NewOrderHandler(orderService)
 	cartHandler = handler.NewCartHandler(cartService)

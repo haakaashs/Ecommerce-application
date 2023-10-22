@@ -10,11 +10,34 @@ import (
 
 func Start() {
 	buildHandler()
-
 	router := mux.NewRouter()
-	router.HandleFunc("/students", basicHandler.GetStudents).Methods("GET")
+
+	// user APIs
+	router.HandleFunc("/user", basicHandler.GetStudents).Methods("POST")
 	router.HandleFunc("/students", basicHandler.InsertOrUpdateStudents).Methods("POST")
 
+	//products APIs
+	
+	// cart APIs
+
+	// order APIs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// server creation with port specified
 	server := &http.Server{
 		Addr:    config.Config.ServerPort,
 		Handler: router,
