@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/haakaashs/antino-labs/constants"
 	"github.com/haakaashs/antino-labs/models"
 	"github.com/haakaashs/antino-labs/service"
 )
@@ -38,14 +37,14 @@ func (h *productHandler) CreateProduct(ctx *gin.Context) {
 		return
 	}
 
-	err := h.productService.CreateProduct(product)
+	productId, err := h.productService.CreateProduct(product)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	log.Println("exit " + funcdesc)
-	ctx.JSON(http.StatusOK, constants.SuccessMessage)
+	ctx.JSON(http.StatusOK, gin.H{"product_id": productId})
 }
 
 func (h *productHandler) GetProductById(ctx *gin.Context) {

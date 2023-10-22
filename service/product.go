@@ -8,7 +8,7 @@ import (
 )
 
 type ProductService interface {
-	CreateProduct(models.Product) error
+	CreateProduct(models.Product) (uint64, error)
 	GetProductById(uint64) (models.Product, error)
 	GetProducts() ([]models.Product, error)
 	DeleteProductById(uint64) error
@@ -24,20 +24,20 @@ func NewProductService(productDb database.ProductDb) *productService {
 	}
 }
 
-func (s *productService) CreateProduct(product models.Product) error {
+func (s *productService) CreateProduct(product models.Product) (uint64, error) {
 	funcdesc := "CreateProduct"
 	log.Println("enter service" + funcdesc)
 
 	// while login check user permission for add,edit,delete product
 	// assuming that user permission is obtained when login
 
-	err := s.productDb.CreateProduct(product)
+	productId, err := s.productDb.CreateProduct(product)
 	if err != nil {
-		return err
+		return productId, err
 	}
 
 	log.Println("exit " + funcdesc)
-	return nil
+	return productId, nil
 }
 
 func (s *productService) GetProductById(productId uint64) (product models.Product, err error) {

@@ -61,6 +61,17 @@ func Start() {
 	}
 
 	// order APIs
+	order := router.Group("/order")
+	{
+		// create order
+		order.POST("/create")
+
+		// get order by ID
+		order.GET("/{order_id}")
+
+		// update the order status
+		order.PUT("/update")
+	}
 
 	// Lestening on port 8081
 	log.Println("Starting server ...............")

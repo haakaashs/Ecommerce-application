@@ -83,5 +83,5 @@ func (h *cartHandler) DeleteCartById(ctx *gin.Context) {
 	}
 
 	log.Println("exit " + funcdesc)
-	ctx.JSON(http.StatusOK, gin.H{"Status": "Deletion Successful"})
+	ctx.JSON(http.StatusOK, gin.H{"Status": "Successfully Deleted"})
 }

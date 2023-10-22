@@ -9,7 +9,7 @@ import (
 )
 
 type ProductDb interface {
-	CreateProduct(models.Product) error
+	CreateProduct(models.Product) (uint64, error)
 	GetProductById(uint64) (models.Product, error)
 	Getproducts() ([]models.Product, error)
 	DeleteProductById(uint64) error
@@ -25,17 +25,17 @@ func NewProductDb() *productDb {
 	}
 }
 
-func (d *productDb) CreateProduct(product models.Product) error {
+func (d *productDb) CreateProduct(product models.Product) (uint64, error) {
 	funcdesc := "CreateProduct"
 	log.Println("enter DB" + funcdesc)
 
 	result := d.db.Debug().Save(&product)
 	if err := result.Error; err != nil {
 		log.Fatal("error in DB query: ", err.Error())
-		return err
+		return product.ID, err
 	}
 	log.Println("exit " + funcdesc)
-	return nil
+	return product.ID, nil
 }
 
 func (d *productDb) GetProductById(productId uint64) (product models.Product, err error) {
