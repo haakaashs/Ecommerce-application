@@ -6,6 +6,9 @@ import (
 )
 
 func main() {
+	// initialize database
 	config.InitializeDB("./config.env")
+
+	// start application
 	routes.Start()
 }

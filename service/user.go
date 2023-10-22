@@ -11,7 +11,7 @@ import (
 )
 
 type UserService interface {
-	CreateUser(models.User) (uint, error)
+	CreateUser(models.User) (uint64, error)
 	GetUserById(uint64) (models.User, error)
 	GetUsers() ([]models.User, error)
 	UserLogin(resources.UserCredential) error
@@ -28,7 +28,7 @@ func NewUserService(userDB database.UserDb) *userService {
 	}
 }
 
-func (s *userService) CreateUser(user models.User) (uint, error) {
+func (s *userService) CreateUser(user models.User) (uint64, error) {
 	funcdesc := "CreateUser"
 	log.Println("enter service" + funcdesc)
 
@@ -71,7 +71,7 @@ func (s *userService) GetUsers() (users []models.User, err error) {
 	return users, nil
 }
 
-func (s *userService) UserLogin(input resources.UserCredential) (err error) {
+func (s *userService) UserLogin(input resources.UserCredential) error {
 	funcdesc := "UserLogin"
 	log.Println("enter service" + funcdesc)
 
@@ -86,11 +86,11 @@ func (s *userService) UserLogin(input resources.UserCredential) (err error) {
 	return nil
 }
 
-func (s *userService) DeleteUserById(userId uint64) (err error) {
+func (s *userService) DeleteUserById(userId uint64) error {
 	funcdesc := "DeleteUserById"
 	log.Println("enter service" + funcdesc)
 
-	err = s.userDB.DeleteUserById(userId)
+	err := s.userDB.DeleteUserById(userId)
 	if err != nil {
 		return err
 	}

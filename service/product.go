@@ -24,14 +24,14 @@ func NewProductService(productDb database.ProductDb) *productService {
 	}
 }
 
-func (s *productService) CreateProduct(product models.Product) (err error) {
+func (s *productService) CreateProduct(product models.Product) error {
 	funcdesc := "CreateProduct"
 	log.Println("enter service" + funcdesc)
 
 	// while login check user permission for add,edit,delete product
 	// assuming that user permission is obtained when login
 
-	err = s.productDb.CreateProduct(product)
+	err := s.productDb.CreateProduct(product)
 	if err != nil {
 		return err
 	}
@@ -66,11 +66,11 @@ func (s *productService) GetProducts() (products []models.Product, err error) {
 	return products, nil
 }
 
-func (s *productService) DeleteProductById(userId uint64) (err error) {
+func (s *productService) DeleteProductById(productId uint64) error {
 	funcdesc := "DeleteProductById"
 	log.Println("enter service" + funcdesc)
 
-	err = s.productDb.DeleteProductById(userId)
+	err := s.productDb.DeleteProductById(productId)
 	if err != nil {
 		return err
 	}

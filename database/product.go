@@ -25,12 +25,12 @@ func NewProductDb() *productDb {
 	}
 }
 
-func (d *productDb) CreateProduct(product models.Product) (err error) {
+func (d *productDb) CreateProduct(product models.Product) error {
 	funcdesc := "CreateProduct"
 	log.Println("enter DB" + funcdesc)
 
 	result := d.db.Debug().Save(&product)
-	if err = result.Error; err != nil {
+	if err := result.Error; err != nil {
 		log.Fatal("error in DB query: ", err.Error())
 		return err
 	}
@@ -64,12 +64,12 @@ func (d *productDb) Getproducts() (products []models.Product, err error) {
 	return products, nil
 }
 
-func (d *productDb) DeleteProductById(productId uint64) (err error) {
+func (d *productDb) DeleteProductById(productId uint64) error {
 	funcdesc := "DeleteProductById"
 	log.Println("enter DB" + funcdesc)
 
 	result := d.db.Debug().Where("id=?", productId).Delete(models.Product{})
-	if err = result.Error; err != nil {
+	if err := result.Error; err != nil {
 		log.Fatal("error in DB query: ", err.Error())
 		return err
 	}

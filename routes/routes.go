@@ -51,13 +51,13 @@ func Start() {
 	cart := router.Group("/cart")
 	{
 		// create and update cart
-		cart.POST("/create")
+		cart.POST("/create", cartHandler.CreateCart)
 
 		// get cart by ID
-		cart.GET("/{card_id}")
+		cart.GET("/{card_id}", cartHandler.GetCartById)
 
 		// delete cart by ID
-		cart.DELETE("/{cart_id}")
+		cart.DELETE("/{cart_id}", cartHandler.DeleteCartById)
 	}
 
 	// order APIs

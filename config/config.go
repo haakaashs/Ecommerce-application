@@ -10,7 +10,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// variables
 var (
 	Conn   *gorm.DB
 	Config Env
@@ -41,7 +40,7 @@ func loadEnv(path string) Env {
 	}
 }
 
-// Initialize database
+// Initialize database connection
 func InitializeDB(path string) {
 
 	Config = loadEnv(path)

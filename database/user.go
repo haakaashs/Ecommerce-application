@@ -10,7 +10,7 @@ import (
 )
 
 type UserDb interface {
-	CreateUser(models.User) (uint, error)
+	CreateUser(models.User) (uint64, error)
 	GetUserById(uint64) (models.User, error)
 	GetUsers() ([]models.User, error)
 	UserLogin(resources.UserCredential) (models.User, error)
@@ -27,7 +27,7 @@ func NewUserDb() *userDb {
 	}
 }
 
-func (d *userDb) CreateUser(user models.User) (uint, error) {
+func (d *userDb) CreateUser(user models.User) (uint64, error) {
 	funcdesc := "CreateUser"
 	log.Println("enter DB" + funcdesc)
 
@@ -80,12 +80,12 @@ func (d *userDb) UserLogin(user resources.UserCredential) (output models.User, e
 	return output, nil
 }
 
-func (d *userDb) DeleteUserById(userId uint64) (err error) {
+func (d *userDb) DeleteUserById(userId uint64) error {
 	funcdesc := "DeleteUserById"
 	log.Println("enter DB" + funcdesc)
 
 	result := d.db.Debug().Where("id=?", userId).Delete(models.User{})
-	if err = result.Error; err != nil {
+	if err := result.Error; err != nil {
 		log.Fatal("error in DB query: ", err.Error())
 		return err
 	}

@@ -1,11 +1,17 @@
 package database
 
 import (
+	"log"
+
 	"github.com/haakaashs/antino-labs/config"
+	"github.com/haakaashs/antino-labs/models"
 	"gorm.io/gorm"
 )
 
 type CartDB interface {
+	CreateCart(models.Cart) (uint64, error)
+	GetCartById(uint64) (models.Cart, error)
+	DeleteCartById(uint64) error
 }
 
 type cartDB struct {
@@ -16,4 +22,45 @@ func NewCartDB() *cartDB {
 	return &cartDB{
 		db: config.Conn,
 	}
+}
+
+func (d *cartDB) CreateCart(cart models.Cart) (uint64, error) {
+	funcdesc := "CreateCart"
+	log.Println("enter DB" + funcdesc)
+
+	result := d.db.Debug().Save(&cart)
+	if err := result.Error; err != nil {
+		log.Fatal("error in DB query: ", err.Error())
+		return cart.ID, err
+	}
+
+	log.Println("exit " + funcdesc)
+	return cart.ID, nil
+}
+
+func (d *cartDB) GetCartById(cartId uint64) (cart models.Cart, err error) {
+	funcdesc := "GetCartById"
+	log.Println("enter DB" + funcdesc)
+
+	result := d.db.Debug().Where("id=?", cartId).Find(&cart)
+	if err = result.Error; err != nil {
+		log.Fatal("error in DB query: ", err.Error())
+		return cart, err
+	}
+	log.Println("exit " + funcdesc)
+	return cart, nil
+}
+
+func (d *cartDB) DeleteCartById(cartId uint64) error {
+	funcdesc := "DeleteCartById"
+	log.Println("enter DB" + funcdesc)
+
+	result := d.db.Debug().Where("id=?", cartId).Delete(models.Cart{})
+	if err := result.Error; err != nil {
+		log.Fatal("error in DB query: ", err.Error())
+		return err
+	}
+
+	log.Println("exit " + funcdesc)
+	return nil
 }
