@@ -37,7 +37,7 @@ func buildDB() {
 func buildService() {
 	userService = service.NewUserService(userDb)
 	productService = service.NewProductService(productDb)
-	orderService = service.NewOrderService(orderDb)
+	orderService = service.NewOrderService(orderDb, cartDb, productDb)
 	cartService = service.NewCartService(cartDb, productDb)
 }
 

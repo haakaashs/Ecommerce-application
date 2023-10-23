@@ -12,6 +12,7 @@ type CartDB interface {
 	CreateCart(models.Cart) (uint64, error)
 	GetCartById(uint64) (models.Cart, error)
 	DeleteCartById(uint64) error
+	GetCartByUserId(UserId uint64) (cart models.Cart, err error)
 }
 
 type cartDB struct {
@@ -63,4 +64,17 @@ func (d *cartDB) DeleteCartById(cartId uint64) error {
 
 	log.Println("exit " + funcdesc)
 	return nil
+}
+
+func (d *cartDB) GetCartByUserId(UserId uint64) (cart models.Cart, err error) {
+	funcdesc := "GetCartByUserId"
+	log.Println("enter DB" + funcdesc)
+
+	result := d.db.Debug().Where("user_id=?", UserId).Find(&cart)
+	if err = result.Error; err != nil {
+		log.Fatal("error in DB query: ", err.Error())
+		return cart, err
+	}
+	log.Println("exit " + funcdesc)
+	return cart, nil
 }

@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/haakaashs/antino-labs/constants"
 	"github.com/haakaashs/antino-labs/models"
 	"github.com/haakaashs/antino-labs/resources"
 	"github.com/haakaashs/antino-labs/service"
@@ -77,9 +78,14 @@ func (h *orderHandler) UpdateOrderStatus(ctx *gin.Context) {
 		return
 	}
 
-	err := h.orderService.UpdateOrderStatus(input)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	if input.OrderStatus == constants.CANCELLED {
+		err := h.orderService.UpdateOrderStatus(input)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	} else {
+		ctx.JSON(http.StatusOK, gin.H{"error": "can not update status to " + input.OrderStatus})
 		return
 	}
 

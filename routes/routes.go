@@ -70,7 +70,7 @@ func Start() {
 		order.GET("/{order_id}", orderHandler.GetOrderById)
 
 		// update the order status
-		order.PUT("/update", orderHandler.UpdateOrderStatus)
+		// order.PUT("/update", orderHandler.UpdateOrderStatus)
 	}
 
 	// Lestening on port 8081

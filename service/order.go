@@ -4,9 +4,11 @@ import (
 	"log"
 	"time"
 
+	"github.com/haakaashs/antino-labs/constants"
 	"github.com/haakaashs/antino-labs/database"
 	"github.com/haakaashs/antino-labs/models"
 	"github.com/haakaashs/antino-labs/resources"
+	"github.com/haakaashs/antino-labs/utils"
 )
 
 type OrderService interface {
@@ -16,12 +18,16 @@ type OrderService interface {
 }
 
 type orderService struct {
-	orderDB database.OrderDb
+	orderDB   database.OrderDb
+	cartDb    database.CartDB
+	productDb database.ProductDb
 }
 
-func NewOrderService(orderDB database.OrderDb) *orderService {
+func NewOrderService(orderDB database.OrderDb, cartDb database.CartDB, productDb database.ProductDb) *orderService {
 	return &orderService{
-		orderDB: orderDB,
+		orderDB:   orderDB,
+		cartDb:    cartDb,
+		productDb: productDb,
 	}
 }
 
@@ -29,12 +35,38 @@ func (s *orderService) CreateOrder(order models.Order) (uint64, error) {
 	funcdesc := "CreateOrder"
 	log.Println("enter service" + funcdesc)
 
+	cart, err := s.cartDb.GetCartByUserId(order.UserID)
+	if err != nil {
+		return 0, err
+	}
+
+	order.OrderProducts = cart.CartProducts
+	order.OrderStatus = constants.PLACED
 	order.IsActive = true
-	order.CreatedAt = time.Now()
 	orderId, err := s.orderDB.CreateOrder(order)
 	if err != nil {
 		return orderId, err
 	}
+
+	// inventory update
+	go func(cart models.Cart) {
+		cartResource, _ := utils.ModelToResource(&cart)
+		for _, val := range cartResource.CartProducts {
+			product, _ := s.productDb.GetProductById(val.Id)
+			product.InventoryQty = product.InventoryQty - val.ProductQty
+			s.productDb.CreateProduct(product)
+		}
+	}(cart)
+
+	// order status
+	go func(ordId uint64) {
+		time.Sleep(time.Second * 5)
+		for _, status := range []string{constants.DISPATCHED, constants.COMPLETED} {
+			time.Sleep(time.Second * 5)
+			s.UpdateOrderStatus(resources.OrderStatusUpdate{OrderId: ordId, OrderStatus: status})
+
+		}
+	}(order.ID)
 
 	log.Println("exit " + funcdesc)
 	return orderId, nil
