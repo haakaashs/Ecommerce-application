@@ -6,15 +6,14 @@ import (
 
 	"github.com/haakaashs/antino-labs/constants"
 	"github.com/haakaashs/antino-labs/database"
-	"github.com/haakaashs/antino-labs/models"
 	"github.com/haakaashs/antino-labs/resources"
 	"github.com/haakaashs/antino-labs/utils"
 )
 
 type CartService interface {
-	CreateCart(cart resources.CartResource) (uint64, error)
-	GetCartById(cartId uint64) (cart models.Cart, err error)
-	DeleteCartById(cartId uint64) error
+	CreateCart(resources.CartResource) (uint64, error)
+	GetCartById(uint64) (resources.CartResource, error)
+	DeleteCartById(uint64) error
 }
 
 type cartService struct {
@@ -40,10 +39,7 @@ func (s *cartService) CreateCart(cart resources.CartResource) (uint64, error) {
 	}
 
 	// resource to model conversion
-	cartM, err := utils.ResourceToModel(&cart)
-	if err != nil {
-		return cart.ID, err
-	}
+	cartM := utils.ResourceToModel(cart)
 
 	cartId, err := s.cartDB.CreateCart(cartM)
 	if err != nil {
@@ -99,11 +95,16 @@ func (s *cartService) calculateCartValue(cart *resources.CartResource) error {
 	return nil
 }
 
-func (s *cartService) GetCartById(cartId uint64) (cart models.Cart, err error) {
+func (s *cartService) GetCartById(userId uint64) (cart resources.CartResource, err error) {
 	funcdesc := "GetCartById"
 	log.Println("enter service" + funcdesc)
 
-	cart, err = s.cartDB.GetCartById(cartId)
+	cartM, err := s.cartDB.GetCartById(userId)
+	if err != nil {
+		return cart, err
+	}
+
+	cart, err = utils.ModelToResource(cartM)
 	if err != nil {
 		return cart, err
 	}
@@ -112,11 +113,11 @@ func (s *cartService) GetCartById(cartId uint64) (cart models.Cart, err error) {
 	return cart, nil
 }
 
-func (s *cartService) DeleteCartById(cartId uint64) error {
+func (s *cartService) DeleteCartById(userId uint64) error {
 	funcdesc := "DeleteCartById"
 	log.Println("enter service" + funcdesc)
 
-	err := s.cartDB.DeleteCartById(cartId)
+	err := s.cartDB.DeleteCartById(userId)
 	if err != nil {
 		return err
 	}

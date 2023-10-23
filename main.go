@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+
 	// initialize database
 	config.InitializeDB("./config.env")
 

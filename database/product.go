@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"log"
 
 	"github.com/haakaashs/antino-labs/config"
@@ -13,7 +14,6 @@ type ProductDb interface {
 	GetProductById(uint64) (models.Product, error)
 	Getproducts() ([]models.Product, error)
 	DeleteProductById(uint64) error
-	// GetProductsByIds([]uint64) (map[uint64]float64, error)
 }
 
 type productDb struct {
@@ -32,7 +32,7 @@ func (d *productDb) CreateProduct(product models.Product) (uint64, error) {
 
 	result := d.db.Debug().Save(&product)
 	if err := result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return product.ID, err
 	}
 	log.Println("exit " + funcdesc)
@@ -45,8 +45,10 @@ func (d *productDb) GetProductById(productId uint64) (product models.Product, er
 
 	result := d.db.Debug().Where("id=?", productId).Find(&product)
 	if err = result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return product, err
+	} else if product.ID == 0 {
+		return product, errors.New("product id doesn't exist")
 	}
 	log.Println("exit " + funcdesc)
 	return product, nil
@@ -58,7 +60,7 @@ func (d *productDb) Getproducts() (products []models.Product, err error) {
 
 	result := d.db.Debug().Find(&products)
 	if err = result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return products, err
 	}
 	log.Println("exit " + funcdesc)
@@ -71,7 +73,7 @@ func (d *productDb) DeleteProductById(productId uint64) error {
 
 	result := d.db.Debug().Where("id=?", productId).Delete(models.Product{})
 	if err := result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return err
 	}
 
@@ -86,7 +88,7 @@ func (d *productDb) DeleteProductById(productId uint64) error {
 // 	productMap := map[uint64]float64{}
 // 	result := d.db.Debug().Where("id in", productIds).Find(&productMap)
 // 	if err := result.Error; err != nil {
-// 		log.Fatal("error in DB query: ", err.Error())
+// 		log.Println("error in DB query: ", err.Error())
 // 		return productMap, err
 // 	}
 

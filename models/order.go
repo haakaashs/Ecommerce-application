@@ -10,7 +10,6 @@ type Order struct {
 	Dispatched    time.Time `gorm:"type:datetime" json:"dispatched"`
 	OrderValue    float64   `gorm:"type:decimal(10,2);not null" json:"order_value"`
 	IsActive      bool      `gorm:"type:tinyint(1);not null"`
-	CreatedAt     time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 }
 
 func (Order) TableName() string {

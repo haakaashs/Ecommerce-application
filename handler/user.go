@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -39,6 +40,7 @@ func (h *userHandler) CreateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	fmt.Println("helloworld: " + user.Password)
 
 	userId, err := h.userService.CreateUser(user)
 	if err != nil {

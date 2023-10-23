@@ -1,7 +1,7 @@
 package resources
 
 type CartProduct struct {
-	Id                uint64  `json:"id"`
+	Id                uint64  `json:"-"`
 	ProductId         uint64  `json:"product_id"`
 	ProductName       string  `json:"product_name"`
 	ProductQty        uint    `json:"product_qty"`

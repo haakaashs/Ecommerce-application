@@ -12,6 +12,9 @@ func Start() {
 	router := gin.Default()
 	router.Use(gin.Logger())
 
+	// Use the Recovery middleware to handle panics
+	router.Use(gin.Recovery())
+
 	// user APIs
 	user := router.Group("/user")
 	{
@@ -19,7 +22,7 @@ func Start() {
 		user.POST("/create", userHandler.CreateUser)
 
 		// get user by id
-		user.GET("/{user_id}", userHandler.GetUserById)
+		user.GET("/:user_id", userHandler.GetUserById)
 
 		// get all users
 		user.GET("/get-all", userHandler.GetUsers)
@@ -28,7 +31,7 @@ func Start() {
 		user.POST("/login", userHandler.UserLogin)
 
 		// delete user by id
-		user.DELETE("/{user_id}", userHandler.DeleteUserById)
+		user.DELETE("/:user_id", userHandler.DeleteUserById)
 	}
 
 	// product APIs
@@ -38,13 +41,13 @@ func Start() {
 		product.POST("/create", productHandler.CreateProduct)
 
 		// get product by id
-		product.GET("/{product_id}", productHandler.GetProductById)
+		product.GET("/:product_id", productHandler.GetProductById)
 
 		// get all the products
 		product.GET("/get-all", productHandler.GetProducts)
 
 		// delete product by id
-		product.POST("/{product_id}", productHandler.DeleteProductById)
+		product.DELETE("/:product_id", productHandler.DeleteProductById)
 	}
 
 	// cart APIs
@@ -54,10 +57,10 @@ func Start() {
 		cart.POST("/create", cartHandler.CreateCart)
 
 		// get cart by ID
-		cart.GET("/{card_id}", cartHandler.GetCartById)
+		cart.GET("/:user_id", cartHandler.GetCartById)
 
 		// delete cart by ID
-		cart.DELETE("/{cart_id}", cartHandler.DeleteCartById)
+		cart.DELETE("/:user_id", cartHandler.DeleteCartById)
 	}
 
 	// order APIs
@@ -67,10 +70,10 @@ func Start() {
 		order.POST("/create", orderHandler.CreateOrder)
 
 		// get order by ID
-		order.GET("/{order_id}", orderHandler.GetOrderById)
+		order.GET("/:order_id", orderHandler.GetOrderById)
 
-		// update the order status
-		// order.PUT("/update", orderHandler.UpdateOrderStatus)
+		// update the order status to cancelled
+		order.PUT("/update", orderHandler.UpdateOrderStatus)
 	}
 
 	// Lestening on port 8081

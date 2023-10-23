@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"log"
 
 	"github.com/haakaashs/antino-labs/config"
@@ -31,7 +32,7 @@ func (d *orderDb) CreateOrder(order models.Order) (uint64, error) {
 
 	result := d.db.Debug().Create(&order)
 	if err := result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return order.ID, err
 	}
 
@@ -45,9 +46,12 @@ func (d *orderDb) GetOrderById(orderId uint64) (order models.Order, err error) {
 
 	result := d.db.Debug().Where("id=?", orderId).Find(&order)
 	if err = result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return order, err
+	} else if order.ID == 0 {
+		return order, errors.New("user id doesn't exist")
 	}
+
 	log.Println("exit " + funcdesc)
 	return order, nil
 }
@@ -58,7 +62,7 @@ func (d *orderDb) UpdateOrderStatus(orderUpdate resources.OrderStatusUpdate) err
 
 	result := d.db.Debug().Where("id=?", orderUpdate.OrderId).Update("order_status=?", orderUpdate.OrderStatus)
 	if err := result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return err
 	}
 

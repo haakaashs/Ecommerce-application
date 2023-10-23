@@ -10,7 +10,6 @@ CREATE TABLE users (
     is_active TINYINT(1) NOT NULL,
     phone BIGINT NOT NULL UNIQUE,
     address VARCHAR(255),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -22,8 +21,6 @@ CREATE TABLE products (
     product_category ENUM('premium', 'regular', 'budget') NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     inventory_qty INT NOT NULL,
-    is_active TINYINT(1) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -47,6 +44,5 @@ CREATE TABLE orders (
     dispatched DATETIME,
     order_value DECIMAL(10, 2) NOT NULL,
     is_active TINYINT(1) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

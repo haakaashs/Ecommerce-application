@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"log"
 
 	"github.com/haakaashs/antino-labs/config"
@@ -33,7 +34,7 @@ func (d *userDb) CreateUser(user models.User) (uint64, error) {
 
 	result := d.db.Debug().Save(&user)
 	if err := result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return user.ID, err
 	}
 	log.Println("exit " + funcdesc)
@@ -46,8 +47,10 @@ func (d *userDb) GetUserById(userId uint64) (user models.User, err error) {
 
 	result := d.db.Debug().Where("id=?", userId).Find(&user)
 	if err = result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return user, err
+	} else if user.ID == 0 {
+		return user, errors.New("user id doesn't exist")
 	}
 	log.Println("exit " + funcdesc)
 	return user, nil
@@ -59,7 +62,7 @@ func (d *userDb) GetUsers() (users []models.User, err error) {
 
 	result := d.db.Debug().Find(&users)
 	if err = result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return users, err
 	}
 	log.Println("exit " + funcdesc)
@@ -72,7 +75,7 @@ func (d *userDb) UserLogin(user resources.UserCredential) (output models.User, e
 
 	result := d.db.Debug().Where("email=?", user.UserName).Find(&output)
 	if err = result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return output, err
 	}
 
@@ -86,7 +89,7 @@ func (d *userDb) DeleteUserById(userId uint64) error {
 
 	result := d.db.Debug().Where("id=?", userId).Delete(models.User{})
 	if err := result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return err
 	}
 

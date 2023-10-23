@@ -11,9 +11,9 @@ import (
 )
 
 type CartHandler interface {
-	CreateCart(ctx *gin.Context)
-	GetCartById(ctx *gin.Context)
-	DeleteCartById(ctx *gin.Context)
+	CreateCart(*gin.Context)
+	GetCartById(*gin.Context)
+	DeleteCartById(*gin.Context)
 }
 
 type cartHandler struct {
@@ -50,13 +50,13 @@ func (h *cartHandler) GetCartById(ctx *gin.Context) {
 	funcdesc := "GetCartById"
 	log.Println("enter handeler" + funcdesc)
 
-	cartId, err := strconv.Atoi(ctx.Param("cart_id"))
+	userId, err := strconv.Atoi(ctx.Param("user_id"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	cart, err := h.cartService.GetCartById(uint64(cartId))
+	cart, err := h.cartService.GetCartById(uint64(userId))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -70,13 +70,13 @@ func (h *cartHandler) DeleteCartById(ctx *gin.Context) {
 	funcdesc := "DeleteCartById"
 	log.Println("enter handeler" + funcdesc)
 
-	cartId, err := strconv.Atoi(ctx.Param("product_id"))
+	userId, err := strconv.Atoi(ctx.Param("user_id"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = h.cartService.DeleteCartById(uint64(cartId))
+	err = h.cartService.DeleteCartById(uint64(userId))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

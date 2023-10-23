@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"log"
 
 	"github.com/haakaashs/antino-labs/config"
@@ -29,9 +30,9 @@ func (d *cartDB) CreateCart(cart models.Cart) (uint64, error) {
 	funcdesc := "CreateCart"
 	log.Println("enter DB" + funcdesc)
 
-	result := d.db.Debug().Save(&cart)
+	result := d.db.Debug().Create(&cart)
 	if err := result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return cart.ID, err
 	}
 
@@ -39,26 +40,28 @@ func (d *cartDB) CreateCart(cart models.Cart) (uint64, error) {
 	return cart.ID, nil
 }
 
-func (d *cartDB) GetCartById(cartId uint64) (cart models.Cart, err error) {
+func (d *cartDB) GetCartById(userId uint64) (cart models.Cart, err error) {
 	funcdesc := "GetCartById"
 	log.Println("enter DB" + funcdesc)
 
-	result := d.db.Debug().Where("id=?", cartId).Find(&cart)
+	result := d.db.Debug().Where("user_id=?", userId).Find(&cart)
 	if err = result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return cart, err
+	} else if cart.ID == 0 {
+		return cart, errors.New("user id doesn't exist")
 	}
 	log.Println("exit " + funcdesc)
 	return cart, nil
 }
 
-func (d *cartDB) DeleteCartById(cartId uint64) error {
+func (d *cartDB) DeleteCartById(userId uint64) error {
 	funcdesc := "DeleteCartById"
 	log.Println("enter DB" + funcdesc)
 
-	result := d.db.Debug().Where("id=?", cartId).Delete(models.Cart{})
+	result := d.db.Debug().Where("user_id=?", userId).Delete(models.Cart{})
 	if err := result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return err
 	}
 
@@ -72,7 +75,7 @@ func (d *cartDB) GetCartByUserId(UserId uint64) (cart models.Cart, err error) {
 
 	result := d.db.Debug().Where("user_id=?", UserId).Find(&cart)
 	if err = result.Error; err != nil {
-		log.Fatal("error in DB query: ", err.Error())
+		log.Println("error in DB query: ", err.Error())
 		return cart, err
 	}
 	log.Println("exit " + funcdesc)
