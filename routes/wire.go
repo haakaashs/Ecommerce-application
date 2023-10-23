@@ -38,7 +38,7 @@ func buildService() {
 	userService = service.NewUserService(userDb)
 	productService = service.NewProductService(productDb)
 	orderService = service.NewOrderService(orderDb)
-	cartService = service.NewCartService(cartDb)
+	cartService = service.NewCartService(cartDb, productDb)
 }
 
 func buildHandler() {

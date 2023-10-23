@@ -7,8 +7,6 @@ type User struct {
 	Name      string    `gorm:"type:varchar(255);not null" json:"name"`
 	Password  string    `gorm:"type:varchar(255);not null" json:"-"`
 	Email     string    `gorm:"type:varchar(255);not null;unique" json:"email"`
-	Role      string    `gorm:"type:enum('admin', 'customer');not null" json:"role"`
-	IsActive  bool      `gorm:"type:tinyint(1);not null"`
 	Phone     uint64    `gorm:"not null;unique" json:"phone"`
 	Address   string    `gorm:"type:varchar(255)" json:"address"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`

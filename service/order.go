@@ -2,6 +2,7 @@ package service
 
 import (
 	"log"
+	"time"
 
 	"github.com/haakaashs/antino-labs/database"
 	"github.com/haakaashs/antino-labs/models"
@@ -28,6 +29,8 @@ func (s *orderService) CreateOrder(order models.Order) (uint64, error) {
 	funcdesc := "CreateOrder"
 	log.Println("enter service" + funcdesc)
 
+	order.IsActive = true
+	order.CreatedAt = time.Now()
 	orderId, err := s.orderDB.CreateOrder(order)
 	if err != nil {
 		return orderId, err

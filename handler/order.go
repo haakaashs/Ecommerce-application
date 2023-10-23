@@ -12,6 +12,9 @@ import (
 )
 
 type OrderHandler interface {
+	CreateOrder(ctx *gin.Context)
+	GetOrderById(ctx *gin.Context)
+	UpdateOrderStatus(ctx *gin.Context)
 }
 
 type orderHandler struct {

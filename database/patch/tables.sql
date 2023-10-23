@@ -23,8 +23,7 @@ CREATE TABLE products (
     price DECIMAL(10, 2) NOT NULL,
     inventory_qty INT NOT NULL,
     is_active TINYINT(1) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    modified_at DATETIME
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -32,11 +31,10 @@ CREATE TABLE products (
 CREATE TABLE cart (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
-    product_id BIGINT NOT NULL,
+    cart_products JSON NOT NULL,
     qty INT NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 
@@ -44,12 +42,11 @@ CREATE TABLE cart (
 CREATE TABLE orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
-    products JSON NOT NULL,
+    order_products JSON NOT NULL,
     order_status ENUM('placed', 'dispatched', 'completed', 'cancelled') NOT NULL,
     dispatched DATETIME,
     order_value DECIMAL(10, 2) NOT NULL,
     is_active TINYINT(1) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    modified_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

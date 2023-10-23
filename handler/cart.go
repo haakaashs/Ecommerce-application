@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/haakaashs/antino-labs/models"
+	"github.com/haakaashs/antino-labs/resources"
 	"github.com/haakaashs/antino-labs/service"
 )
 
@@ -30,7 +30,7 @@ func (h *cartHandler) CreateCart(ctx *gin.Context) {
 	funcdesc := "CreateCart"
 	log.Println("enter handeler" + funcdesc)
 
-	var cart models.Cart
+	var cart resources.CartResource
 	if err := ctx.ShouldBindJSON(&cart); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

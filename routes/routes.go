@@ -64,13 +64,13 @@ func Start() {
 	order := router.Group("/order")
 	{
 		// create order
-		order.POST("/create")
+		order.POST("/create", orderHandler.CreateOrder)
 
 		// get order by ID
-		order.GET("/{order_id}")
+		order.GET("/{order_id}", orderHandler.GetOrderById)
 
 		// update the order status
-		order.PUT("/update")
+		order.PUT("/update", orderHandler.UpdateOrderStatus)
 	}
 
 	// Lestening on port 8081

@@ -13,6 +13,7 @@ type ProductDb interface {
 	GetProductById(uint64) (models.Product, error)
 	Getproducts() ([]models.Product, error)
 	DeleteProductById(uint64) error
+	// GetProductsByIds([]uint64) (map[uint64]float64, error)
 }
 
 type productDb struct {
@@ -77,3 +78,18 @@ func (d *productDb) DeleteProductById(productId uint64) error {
 	log.Println("exit " + funcdesc)
 	return nil
 }
+
+// func (d *productDb) GetProductsByIds(productIds []uint64) (map[uint64]float64, error) {
+// 	funcdesc := "GetProductsByIds"
+// 	log.Println("enter DB" + funcdesc)
+
+// 	productMap := map[uint64]float64{}
+// 	result := d.db.Debug().Where("id in", productIds).Find(&productMap)
+// 	if err := result.Error; err != nil {
+// 		log.Fatal("error in DB query: ", err.Error())
+// 		return productMap, err
+// 	}
+
+// 	log.Println("exit " + funcdesc)
+// 	return productMap, nil
+// }
