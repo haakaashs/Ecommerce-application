@@ -30,7 +30,7 @@ func (d *cartDB) CreateCart(cart models.Cart) (uint64, error) {
 	funcdesc := "CreateCart"
 	log.Println("enter DB" + funcdesc)
 
-	result := d.db.Debug().Create(&cart)
+	result := d.db.Debug().Save(&cart)
 	if err := result.Error; err != nil {
 		log.Println("error in DB query: ", err.Error())
 		return cart.ID, err

@@ -1,13 +1,13 @@
 package handler
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/haakaashs/antino-labs/config"
 	"github.com/haakaashs/antino-labs/models"
 	"github.com/haakaashs/antino-labs/resources"
 	"github.com/haakaashs/antino-labs/service"
@@ -40,7 +40,12 @@ func (h *userHandler) CreateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Println("helloworld: " + user.Password)
+
+	err := config.Validate.Struct(user)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
 	userId, err := h.userService.CreateUser(user)
 	if err != nil {

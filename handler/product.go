@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/haakaashs/antino-labs/config"
 	"github.com/haakaashs/antino-labs/models"
 	"github.com/haakaashs/antino-labs/service"
 )
@@ -34,6 +35,12 @@ func (h *productHandler) CreateProduct(ctx *gin.Context) {
 	var product models.Product
 	if err := ctx.ShouldBindJSON(&product); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := config.Validate.Struct(product)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

@@ -2,8 +2,10 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"log"
 
+	"github.com/haakaashs/antino-labs/config"
 	"github.com/haakaashs/antino-labs/constants"
 	"github.com/haakaashs/antino-labs/database"
 	"github.com/haakaashs/antino-labs/resources"
@@ -38,6 +40,8 @@ func (s *cartService) CreateCart(cart resources.CartResource) (uint64, error) {
 		return cart.ID, err
 	}
 
+	cart.Qty = uint(len(cart.CartProducts))
+
 	// resource to model conversion
 	cartM := utils.ResourceToModel(cart)
 
@@ -57,26 +61,29 @@ func (s *cartService) calculateCartValue(cart *resources.CartResource) error {
 		count       uint
 	)
 
-	for _, product := range cart.CartProducts {
+	for index, product := range cart.CartProducts {
+
+		// validate product details
+		err := config.Validate.Struct(product)
+		if err != nil {
+			return errors.New("error: " + err.Error())
+		}
 
 		//  maximun order quantity check
 		if product.ProductQty > 10 {
 			return errors.New("maximum product quantity should not exceed 10 for " + product.ProductName)
 		}
 
-		// product uint price check
-		productDetails, err := s.productDb.GetProductById(product.Id)
+		// get product details
+		productDetails, err := s.productDb.GetProductById(product.ProductId)
 		if err != nil {
 			return err
-		} else if productDetails.Price != product.ProductUnitPrice {
-			return errors.New("incorrect product uint price for " + product.ProductName)
 		}
 
-		// product total price check
+		// product total price and cark total price calculated
 		ProductTotalPrice := float64(product.ProductQty) * productDetails.Price
-		if product.ProductTotalPrice != ProductTotalPrice {
-			return errors.New("incorrect product total price for " + product.ProductName)
-		}
+		cart.CartProducts[index].ProductUnitPrice = productDetails.Price
+		cart.CartProducts[index].ProductTotalPrice = ProductTotalPrice
 		TotalAmount += ProductTotalPrice
 
 		// 10% discount if 3 premium products are added
@@ -84,10 +91,12 @@ func (s *cartService) calculateCartValue(cart *resources.CartResource) error {
 			count += 1
 		}
 	}
+	fmt.Println("total: ", count)
 
-	if count > 3 {
-		discount := TotalAmount * 0.1
-		cart.TotalAmount = TotalAmount - discount
+	if count >= 3 {
+		cart.TotalAmount = TotalAmount * 0.9
+		cart.Discount = TotalAmount * 0.1
+		fmt.Println("jill: ", cart.Discount, ":", TotalAmount*0.1)
 		return nil
 	}
 

@@ -2,12 +2,15 @@ package service
 
 import (
 	"log"
+	"time"
 	// "time"
 
 	// "github.com/haakaashs/antino-labs/constants"
+	"github.com/haakaashs/antino-labs/constants"
 	"github.com/haakaashs/antino-labs/database"
 	"github.com/haakaashs/antino-labs/models"
 	"github.com/haakaashs/antino-labs/resources"
+	"github.com/haakaashs/antino-labs/utils"
 	// "github.com/haakaashs/antino-labs/utils"
 )
 
@@ -32,43 +35,43 @@ func NewOrderService(orderDB database.OrderDb, cartDb database.CartDB, productDb
 }
 
 func (s *orderService) CreateOrder(order models.Order) (orderId uint64, err error) {
-	// funcdesc := "CreateOrder"
-	// log.Println("enter service" + funcdesc)
+	funcdesc := "CreateOrder"
+	log.Println("enter service" + funcdesc)
 
-	// cart, err := s.cartDb.GetCartByUserId(order.UserID)
-	// if err != nil {
-	// 	return 0, err
-	// }
+	cart, err := s.cartDb.GetCartByUserId(order.UserID)
+	if err != nil {
+		return 0, err
+	}
 
-	// order.OrderProducts = cart.CartProducts
-	// order.OrderStatus = constants.PLACED
-	// order.IsActive = true
-	// orderId, err := s.orderDB.CreateOrder(order)
-	// if err != nil {
-	// 	return orderId, err
-	// }
+	order.OrderProducts = cart.CartProducts
+	order.OrderStatus = constants.PLACED
+	order.IsActive = true
+	orderId, err = s.orderDB.CreateOrder(order)
+	if err != nil {
+		return orderId, err
+	}
 
-	// // inventory update
-	// go func(cart models.Cart) {
-	// 	cartResource, _ := utils.ModelToResource(&cart)
-	// 	for _, val := range cartResource.CartProducts {
-	// 		product, _ := s.productDb.GetProductById(val.Id)
-	// 		product.InventoryQty = product.InventoryQty - val.ProductQty
-	// 		s.productDb.CreateProduct(product)
-	// 	}
-	// }(cart)
+	// inventory update
+	go func(cart models.Cart) {
+		cartResource, _ := utils.ModelToResource(cart)
+		for _, val := range cartResource.CartProducts {
+			product, _ := s.productDb.GetProductById(val.Id)
+			product.InventoryQty = product.InventoryQty - val.ProductQty
+			s.productDb.CreateProduct(product)
+		}
+	}(cart)
 
-	// // order status
-	// go func(ordId uint64) {
-	// 	time.Sleep(time.Second * 5)
-	// 	for _, status := range []string{constants.DISPATCHED, constants.COMPLETED} {
-	// 		time.Sleep(time.Second * 5)
-	// 		s.UpdateOrderStatus(resources.OrderStatusUpdate{OrderId: ordId, OrderStatus: status})
+	// order status
+	go func(ordId uint64) {
+		time.Sleep(time.Second * 5)
+		for _, status := range []string{constants.DISPATCHED, constants.COMPLETED} {
+			time.Sleep(time.Second * 5)
+			s.UpdateOrderStatus(resources.OrderStatusUpdate{OrderId: ordId, OrderStatus: status})
 
-	// 	}
-	// }(order.ID)
+		}
+	}(order.ID)
 
-	// log.Println("exit " + funcdesc)
+	log.Println("exit " + funcdesc)
 	return orderId, nil
 }
 

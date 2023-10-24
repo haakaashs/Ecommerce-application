@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/haakaashs/antino-labs/config"
 	"github.com/haakaashs/antino-labs/constants"
 	"github.com/haakaashs/antino-labs/models"
 	"github.com/haakaashs/antino-labs/resources"
@@ -35,6 +36,12 @@ func (h *orderHandler) CreateOrder(ctx *gin.Context) {
 	var order models.Order
 	if err := ctx.ShouldBindJSON(&order); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := config.Validate.Struct(order)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

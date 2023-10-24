@@ -1,5 +1,5 @@
 package constants
 
 const (
-	PREMIMUM = "premimum"
+	PREMIMUM = "premium"
 )

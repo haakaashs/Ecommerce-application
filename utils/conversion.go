@@ -12,6 +12,7 @@ func ResourceToModel(cart resources.CartResource) models.Cart {
 		ID:          cart.ID,
 		UserID:      cart.UserID,
 		Qty:         cart.Qty,
+		Discount:    cart.Discount,
 		TotalAmount: cart.TotalAmount,
 	}
 	output.CartProducts, _ = json.Marshal(cart.CartProducts)
@@ -23,6 +24,7 @@ func ModelToResource(cart models.Cart) (resources.CartResource, error) {
 		ID:          cart.ID,
 		UserID:      cart.UserID,
 		Qty:         cart.Qty,
+		Discount:    cart.Discount,
 		TotalAmount: cart.TotalAmount,
 	}
 	err := json.Unmarshal(cart.CartProducts, &output.CartProducts)

@@ -5,15 +5,17 @@ import (
 	"log"
 	"os"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var (
-	Conn   *gorm.DB
-	Config Env
-	err    error
+	Conn     *gorm.DB
+	Config   Env
+	err      error
+	Validate *validator.Validate
 )
 
 // Environment struct
@@ -22,6 +24,11 @@ type Env struct {
 	DBPassword string
 	DBName     string
 	ServerPort string
+}
+
+// initialize validator
+func InitializeValidator() {
+	Validate = validator.New()
 }
 
 // Load env from .env file

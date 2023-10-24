@@ -5,6 +5,7 @@ type Cart struct {
 	UserID       uint64  `gorm:"not null" json:"user_id,omitempty"`
 	Qty          uint    `gorm:"not null" json:"qty,omitempty"`
 	TotalAmount  float64 `gorm:"not null" json:"total_amount,omitempty"`
+	Discount     float64 `gorm:"not null" json:"discount,omitempty"`
 	CartProducts []byte  `json:"cart_products"`
 }
 

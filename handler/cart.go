@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/haakaashs/antino-labs/config"
 	"github.com/haakaashs/antino-labs/resources"
 	"github.com/haakaashs/antino-labs/service"
 )
@@ -36,6 +37,11 @@ func (h *cartHandler) CreateCart(ctx *gin.Context) {
 		return
 	}
 
+	err := config.Validate.Struct(cart)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	cartId, err := h.cartService.CreateCart(cart)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
