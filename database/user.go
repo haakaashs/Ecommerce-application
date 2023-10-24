@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/haakaashs/antino-labs/config"
@@ -78,6 +79,7 @@ func (d *userDb) UserLogin(user resources.UserCredential) (output models.User, e
 		log.Println("error in DB query: ", err.Error())
 		return output, err
 	}
+	fmt.Println(output)
 
 	log.Println("exit " + funcdesc)
 	return output, nil

@@ -76,6 +76,7 @@ func (s *userService) UserLogin(input resources.UserCredential) error {
 	log.Println("enter service" + funcdesc)
 
 	user, err := s.userDB.UserLogin(input)
+
 	if err != nil {
 		return err
 	} else if user.Password != input.Password {
