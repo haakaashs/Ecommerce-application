@@ -6,6 +6,13 @@ import (
 )
 
 func main() {
+
+	// initialize validator
+	config.InitializeValidator()
+
+	// initialize database
 	config.InitializeDB("./config.env")
+
+	// start application
 	routes.Start()
 }
