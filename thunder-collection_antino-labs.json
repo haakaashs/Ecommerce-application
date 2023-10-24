@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "antino-labs",
-    "dateExported": "2023-10-24T09:40:39.932Z",
+    "dateExported": "2023-10-24T11:13:55.925Z",
     "version": "1.1",
     "folders": [
         {
@@ -138,12 +138,14 @@
             "colId": "cca15a92-689f-4030-a58e-59485164f7f2",
             "containerId": "389f126a-16a9-4344-b3f6-43d2259b7459",
             "name": "cancell order",
-            "url": "",
-            "method": "GET",
+            "url": "localhost:8080/order/status/6",
+            "method": "PUT",
             "sortNum": 60000,
             "created": "2023-10-23T09:31:28.025Z",
-            "modified": "2023-10-23T09:31:28.025Z",
-            "headers": []
+            "modified": "2023-10-24T10:26:35.500Z",
+            "headers": [],
+            "params": [],
+            "tests": []
         },
         {
             "_id": "f61c3acc-2495-4df0-8689-b45501e4d6bd",
@@ -301,6 +303,25 @@
             "body": {
                 "type": "json",
                 "raw": "{\n  \"cart_id\":14,\n  \"user_id\": 5,\n  \"cart_products\": [\n    {\n      \"product_id\": 7,\n      \"product_name\": \"avacado\",\n      \"product_qty\": 1\n    },\n    {\n      \"product_id\": 8,\n      \"product_name\": \"cashew\",\n      \"product_qty\": 1\n    }\n  ]\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "475097fe-a987-44e2-a3d4-a986f6e09bbc",
+            "colId": "cca15a92-689f-4030-a58e-59485164f7f2",
+            "containerId": "f2fa72ab-a623-40e4-963f-1a65a110933c",
+            "name": "user login",
+            "url": "localhost:8080/user/login",
+            "method": "POST",
+            "sortNum": 180000,
+            "created": "2023-10-24T11:01:23.584Z",
+            "modified": "2023-10-24T11:12:57.673Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"user_name\":\"test354@gmail.com\",\n  \"password\":\"Hello\"\n}",
                 "form": []
             },
             "tests": []
