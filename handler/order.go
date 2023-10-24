@@ -8,15 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/haakaashs/antino-labs/config"
 	"github.com/haakaashs/antino-labs/constants"
-	"github.com/haakaashs/antino-labs/models"
 	"github.com/haakaashs/antino-labs/resources"
 	"github.com/haakaashs/antino-labs/service"
 )
 
 type OrderHandler interface {
-	CreateOrder(ctx *gin.Context)
-	GetOrderById(ctx *gin.Context)
-	UpdateOrderStatus(ctx *gin.Context)
+	CreateOrder(*gin.Context)
+	GetOrderById(*gin.Context)
+	UpdateOrderStatus(*gin.Context)
 }
 
 type orderHandler struct {
@@ -33,7 +32,7 @@ func (h *orderHandler) CreateOrder(ctx *gin.Context) {
 	funcdesc := "CreateOrder"
 	log.Println("enter handeler" + funcdesc)
 
-	var order models.Order
+	var order resources.OrderResource
 	if err := ctx.ShouldBindJSON(&order); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -79,20 +78,20 @@ func (h *orderHandler) UpdateOrderStatus(ctx *gin.Context) {
 	funcdesc := "UpdateOrderStatus"
 	log.Println("enter handeler" + funcdesc)
 
-	var input resources.OrderStatusUpdate
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	orderId, err := strconv.Atoi(ctx.Param("order_id"))
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if input.OrderStatus == constants.CANCELLED {
-		err := h.orderService.UpdateOrderStatus(input)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-	} else {
-		ctx.JSON(http.StatusOK, gin.H{"error": "can not update status to " + input.OrderStatus})
+	input := resources.OrderStatusUpdate{
+		OrderId:     uint64(orderId),
+		OrderStatus: constants.CANCELLED,
+	}
+
+	err = h.orderService.UpdateOrderStatus(input)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

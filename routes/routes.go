@@ -18,8 +18,9 @@ func Start() {
 	// user APIs
 	user := router.Group("/user")
 	{
+		// for simulation password is stored directly
 		// create and update user
-		user.POST("/create", userHandler.CreateUser)
+		user.POST("/save", userHandler.CreateUser)
 
 		// get user by id
 		user.GET("/:user_id", userHandler.GetUserById)
@@ -38,7 +39,7 @@ func Start() {
 	product := router.Group("/product")
 	{
 		// create and update product
-		product.POST("/create", productHandler.CreateProduct)
+		product.POST("/save", productHandler.CreateProduct)
 
 		// get product by id
 		product.GET("/:product_id", productHandler.GetProductById)
@@ -54,7 +55,7 @@ func Start() {
 	cart := router.Group("/cart")
 	{
 		// create and update cart
-		cart.POST("/create", cartHandler.CreateCart)
+		cart.POST("/save", cartHandler.CreateCart)
 
 		// get cart by ID
 		cart.GET("/:user_id", cartHandler.GetCartById)
@@ -67,13 +68,13 @@ func Start() {
 	order := router.Group("/order")
 	{
 		// create order
-		order.POST("/create", orderHandler.CreateOrder)
+		order.POST("/save", orderHandler.CreateOrder)
 
 		// get order by ID
 		order.GET("/:order_id", orderHandler.GetOrderById)
 
 		// update the order status to cancelled
-		order.PUT("/update", orderHandler.UpdateOrderStatus)
+		order.PUT("/status/:order_id", orderHandler.UpdateOrderStatus)
 	}
 
 	// Lestening on port 8081

@@ -1,7 +1,7 @@
 package models
 
 type Cart struct {
-	ID           uint64  `gorm:"primaryKey" json:"id,omitempty"`
+	ID           uint64  `gorm:"primaryKey" json:"cart_id,omitempty"`
 	UserID       uint64  `gorm:"not null" json:"user_id,omitempty"`
 	Qty          uint    `gorm:"not null" json:"qty,omitempty"`
 	TotalAmount  float64 `gorm:"not null" json:"total_amount,omitempty"`

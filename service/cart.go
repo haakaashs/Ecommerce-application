@@ -43,7 +43,7 @@ func (s *cartService) CreateCart(cart resources.CartResource) (uint64, error) {
 	cart.Qty = uint(len(cart.CartProducts))
 
 	// resource to model conversion
-	cartM := utils.ResourceToModel(cart)
+	cartM := utils.CartResourceToModel(cart)
 
 	cartId, err := s.cartDB.CreateCart(cartM)
 	if err != nil {
@@ -113,7 +113,7 @@ func (s *cartService) GetCartById(userId uint64) (cart resources.CartResource, e
 		return cart, err
 	}
 
-	cart, err = utils.ModelToResource(cartM)
+	cart, err = utils.CartModelToResource(cartM)
 	if err != nil {
 		return cart, err
 	}

@@ -10,7 +10,7 @@ type CartProduct struct {
 }
 
 type CartResource struct {
-	ID           uint64        `json:"id"`
+	ID           uint64        `json:"cart_id"`
 	UserID       uint64        `json:"user_id" validate:"required"`
 	Qty          uint          `json:"qty"`
 	TotalAmount  float64       `json:"total_amount"`

@@ -1,7 +1,7 @@
 package models
 
 type Product struct {
-	ID              uint64  `gorm:"primary_key" json:"id"`
+	ID              uint64  `gorm:"primary_key" json:"product_id"`
 	Name            string  `gorm:"type:varchar(255);not null" json:"name" validate:"required"`
 	Description     string  `gorm:"type:varchar(255);not null" json:"description" validate:"required"`
 	ProductCategory string  `gorm:"type:enum('premium', 'regular', 'budget');not null" json:"product_category" validate:"required"`
