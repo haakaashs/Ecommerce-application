@@ -1,6 +1,6 @@
 # antino-labs
 
-    *This is a industrial standard ecommerce website replica
+    *This is an industrial standard ecommerce website replica
 
     #simply
     *create user -> view products -> add products to cart -> place order -> can also cancel product
@@ -19,12 +19,11 @@
     *view products in cart
     *update products in cart
     *delete cart
-    *create order
     *place an order with products in cart
-    *cancell the order placed
+    *cancel the order placed
 
-    *DB database table create query are available in database/patch/tables.sql
+    *DB- database table create query are available in database/patch/tables.sql
     
     *HTTP resuest collection are available with file thunder-collection_antino-labs.json
     
-    *config file can be changed as requirement 
+    *config file can be changed as per requirement 
