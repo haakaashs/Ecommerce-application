@@ -1,6 +1,6 @@
 # antino-labs
 
-    *This is industrial standard ecommerce website replica
+    *This is a industrial standard ecommerce website replica
 
     #simply
     *create user -> view products -> add products to cart -> place order -> can also cancel product
