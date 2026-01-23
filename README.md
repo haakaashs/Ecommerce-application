@@ -1,4 +1,4 @@
-# antino-labs
+# Ecommerce-application
 
     *This is an industrial standard ecommerce website replica
 
